@@ -1,0 +1,25 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "0c24b1e4-6ee6-def4-3714-ce57b7db7bff++7768",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "0c24b1e4-6ee6-def4-3714-ce57b7db7bff++7768" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "0c24b1e4-6ee6-def4-3714-ce57b7db7bff++7768" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "B3002B1E-E6F3-4E63-99FB-B25CEC0633A9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "0c24b1e4-6ee6-def4-3714-ce57b7db7bff++7768" : "3dglove"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "BulletSoftBody",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "3dglove_core\/3rdparty\/bullet-2.82-r2704\/build\/xcode4\/BulletSoftBody.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/KinaTouch\/3dglove",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0c24b1e4-6ee6-def4-3714-ce57b7db7bff++7768"
+    }
+  ]
+}

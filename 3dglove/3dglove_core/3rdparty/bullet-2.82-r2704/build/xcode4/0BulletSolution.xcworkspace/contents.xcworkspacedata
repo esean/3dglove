@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+	version = "1.0">
+	<FileRef
+		location = "group:App_HelloWorld.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_BasicDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_Box2dDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_BspDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_CcdPhysicsDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_CollisionDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_CollisionInterfaceDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_ConcaveConvexcastDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_ConcaveDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_ConcaveRaycastDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_ConstraintDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_ContinuousConvexCollision.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_ConvexHullDistance.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_DynamicControlDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_EPAPenDepthDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_ForkLiftDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_FeatherstoneMultiBodyDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_FractureDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_GenericJointDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_GimpactTestDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_GjkConvexCastDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_GyroscopicDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_InternalEdgeDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_MovingConcaveDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_MultiMaterialDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_RagdollDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_Raytracer.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_RaytestDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_RollingFrictionDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_SimplexDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_SliderConstraintDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_TerrainDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_UserCollisionAlgorithm.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_VehicleDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_VoronoiFractureDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_ConvexDecompositionDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_SoftDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_SerializeDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:App_BulletXmlImportDemo.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:OpenGLSupport.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:HACD.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:ConvexDecomposition.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:BulletFileLoader.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:BulletWorldImporter.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:BulletXmlWorldImporter.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:LinearMath.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:BulletCollision.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:BulletDynamics.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:BulletSoftBody.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:AppUnitTest.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:AppHelloWorld.xcodeproj">
+	</FileRef>
+	<FileRef
+		location = "group:AppBenchmarks.xcodeproj">
+	</FileRef>
+</Workspace>

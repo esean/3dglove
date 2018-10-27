@@ -1,0 +1,84 @@
+-------------------------------------------------------------------------
+| These are all todo items. Pick one, do it, then remove it. Thanks
+-------------------------------------------------------------------------
+
+- add single large softbody around hand so user can feel object coming before contact
+    still need to use distance calc once object gets near, that how the "impulse force" is calculated, by closeness, to a limit
+
+- hand cylinders: question remains how to get bone data and orientation correct
+    when Leap has new hand data, we read the joint x,y,z from mcp.prevJoint(), but would be better to also read nextJoint() and start
+    to build up actual bones between joints, instead of just joint spheres. This will allow better interaction with objects since
+    there's more hand area space to interact with those devices, instead of just the point contact we have today.
+    - ie, instead of spheres for joints, use cylinders so also makes more of hand shape, thus better interation with edge collision detection
+    - look at leap demo app to see how they do bone data
+
+- grib attract: objects within X distance are attracted toward hand, faster as grib increases, to some limit
+    attraction force can be directed out in space using "laser pointer from palm" as user starts to squeeze when objects in in ray trace path
+    
+- we need ability to set the bounding walls for optimal performance
+    move the floor up, to get objects on floor now, you almost have to have your hand atop the LM device and it can't see well there
+    we should place the "play area" for optimal performace with device
+
+- gravity: why do objects not fall like they should, I'm using the delta time from last call, ~25ms per stepSimulation(), printf(us)
+
+- optimization: in bulletDriver::update_kinematics(), we have hand_vec which now contains ktShapePtr, so we have the full btRigidBody*
+    just need to reach inside that stuct to get motionState and update, much simpler
+
+
+
+-------------------------------------------------------------------------
+| LM demo app (ofApp)
+-------------------------------------------------------------------------
+- can sound class (LM dev side) pull from the impulses reported in hand_vecs?
+
+
+
+
+-------------------------------------------------------------------------
+| Nice to have:
+-------------------------------------------------------------------------
+- leap sdk provides the raw hand image data from the cameras, it would be interesting to overlay atop our hands
+    - can we just provide a leap singleton thru our api, then demo app just pulls the frame(0) to get hand image data, is that where it's contained?
+
+
+
+-------------------------------------------------------------------------
+| API cleanup:
+-------------------------------------------------------------------------
+- provide callback from inside threadWorker::threadedFunction() after getBullet().update_impulses(), provide LM "real-time" updates
+    normally they define that cb fcn as empty {} = compiled out
+
+- need to change TW base class ofThread to pthreads/etc, so portable
+
+- cleanup: check #defs in 3dtarget.h (that is on LM dev side), do #defs go into sdk, need to?
+
+- occasional bullet assert: see doc/bugs/01_bullet_assert
+- FIX: ARCH getting messed up when trying to compile app as 64bit. To reproduce, set all sub-projects to release 64bit, link fails
+
+
+
+
+
+
+-------------------------------------------------------------------------
+| Done, check?
+-------------------------------------------------------------------------
+- CHECK: this is done, but I think the panning filter should be given higher weight based on your distance away, faster tracking as you move away more
+    cam_pos_track_hand: make the panning slower, outside an is_closest_to circle, the setTarget is progressively moved faster the closer
+    to the wall you get, this then allows you to move around the room and then work on stuff, ie, shift focus and work in a 3d space
+
+
+
+-------------------------------------------------------------------------
+| Huh?
+-------------------------------------------------------------------------
+- instead of doing all the LM hand_vec copy stuff, and then needing to access from in draw_helpers, just save off the LM frames, or keep
+    a static pointer to controller that everyone can use, even LM dev can use this controller in their app
+
+
+
+-------------------------------------------------------------------------
+| Notes
+-------------------------------------------------------------------------
+
+

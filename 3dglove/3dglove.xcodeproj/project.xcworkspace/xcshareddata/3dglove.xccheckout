@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>FD4A471E-FEF6-4102-AC74-FE7A84ABEA35</string>
+	<key>IDESourceControlProjectName</key>
+	<string>3dglove</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2b56cdca-4ae6-f291-14e6-ce57b7db7bff</key>
+		<string>https://github.com/esean/3dglove_project</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>trunk/3dglove/3dglove.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2b56cdca-4ae6-f291-14e6-ce57b7db7bff</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>2b56cdca-4ae6-f291-14e6-ce57b7db7bff</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2b56cdca-4ae6-f291-14e6-ce57b7db7bff</string>
+			<key>IDESourceControlWCCName</key>
+			<string>3dglove_project</string>
+		</dict>
+	</array>
+</dict>
+</plist>

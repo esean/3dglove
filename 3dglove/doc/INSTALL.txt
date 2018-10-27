@@ -1,0 +1,132 @@
+------------------------
+| 3dglove Install Doc: |
+------------------------
+
+These directions will help you install the 3dglove development environment.
+
+First you will need to setup these accounts if you don't already have:
+    - Apple ID for Xcode install
+    - Github user account
+    - Leap developer account
+
+
+------------------------
+| Now to installing:   |
+------------------------
+
+1) Make sure you have latest Xcode installed and any cmd-line tools. I use svn to manage checkins, maybe you use git. Just make sure you have some way of checking-out and checking-in to Github.
+
+2) Download OpenFrameworks v0.8.4 from http://openframeworks.cc/download/. Open zip file and copy the entire 'of_v0.8.4_osx_release' directory to some place where you put your code. For this document, let's assume you placed it at $HOME/code/of_v0.8.4_osx_release.
+
+3) Browse to http://www.github.com/KinaTouch, sign in and download the 3dglove project. I don't know about git, but you can either 'Download ZIP' (and rename from 3dglove-master to 3dglove), or use svn to pull the project. Once you have it, place it inside OpenFrameworks so it ends up in of_v0.8.4_osx_release/app/myApps/3dglove.
+
+4) 'cd' into that 3dglove directory. This is the main app folder with Xcode project, but don't open that yet. We need some files included in that project. In the '_misc/' folder is the file Archive.zip. Unzip this file and move the directory ofxUI-master to of_v0.8.4_osx_release/addons/.
+
+5) 'cd' to 3dglove_code/3rdparty/bullet-2.82-r2704. If you are interested in the Bullet physics engine install process, you can open docs/BulletQuickstart.pdf, but all that really needs to be done here is,
+        ** cd build
+        ** ./premake4_osx xcode4
+
+5b) NOTE: if you can't get bullet directories correctly into xcode, go into build/xcode4 and for each of these xcode projects, open it and build, then close
+    BulletCollision.xcodeproj
+    BulletDynamics.xcodeproj
+    BulletSoftBody.xcodeproj
+    LinearMath.xcodeproj
+
+6) Next we will install the FTDI D2XX driver so Mac can talk to the actual glove hardware. Browse to http://www.ftdichip.com/Drivers/D2XX.htm and download D2XX1.2.2.dmg. If interested, you can read the ReadMe.rtf, but again all that really needs to be done are the below commands,
+
+    - Open the D2XX1.2.2.dmg which will open a disk image folder with D2XX and LibTable folders. Copy the D2XX folder to your Desktop.
+
+    - Open a terminal window and 'cd' $HOME.
+
+    - If the /usr/local/lib directory does not exist, create it,
+        $ sudo mkdir -p /usr/local/lib
+
+    - If the /usr/local/include directory does not exist, create it,
+        $ sudo mkdir -p /usr/local/include
+
+    - Copy the dylib and headers,
+        $ sudo cp Desktop/D2XX/bin/10.5-10.7/libftd2xx.1.2.2.dylib /usr/local/lib
+        $ sudo cp Desktop/D2XX/Samples/ftd2xx.h /usr/local/include
+        $ sudo cp Desktop/D2XX/Samples/WinTypes.h /usr/local/include
+
+    - Make a symbolic link,
+        $ cd /usr/local/lib
+        $ sudo ln -sf libftd2xx.1.2.2.dylib libftd2xx.dylib
+
+7) Now 'cd' back to of_v0.8.4_osx_release/app/myApps/3dglove and open the 3dglove Xcode project. You may be asked to install some additional Xcode components. Say yes.
+
+8) Browse to Leap Motion developer website @ https://developer.leapmotion.com/, sign in and download the latest SDK. Once downloaded, open the .tgz and install the .dmg/.pkg software. Once installed you will now see a new item, a black rectangle, in your top task bar. The install process then opens the 'Leap Motion App Home' when done, you can close this unless you want to look around.
+
+  [[The following steps you only need to do if Leap releases a new SDK. When that happens there are 2 headers files and a dylib you have to update in the project:
+    * remove XCode project 3dglove/3dglove_core/leap/leap/Leap.h and LeapMath.h (move to Trash)
+    * Copy LeapSDK/include/Leap.h and LeapMath.h into XCode project 3dglove/glove/leap/leap (Xcode ask copy to destination = yes, and add to 3dglove project)
+    * copy LeapSDK/lib/libLeap.dylib into XCode project frameworks/libLeap.dylib (Xcode ask copy to destination = yes, and add to 3dglove project)
+  ]]
+
+
+------------------------
+| All installed !      |
+------------------------
+
+Now you can plug in the Leap and glove hardware!
+
+In the Xcode project, all compile flags and configuration is handled in 3dtarget.h. Now we are going to setup up the glove hardware.
+
+    - 'cd' to CmdLine_tools/set_ftdi
+    - Type 'make'
+    - Type './set_ftdi 0 10' to set the glove channel 0 intensity to 10 (out of 4095). We are only doing this to get the FTDI identifier text.
+    - Your Mac most likely now will display a 'FTDI INIT FAIL' message and a sudo command to fix the problem. Run that command to unload the Mac kernel extension for the FTDI cable since we will be using the driver we installed above. You may have to do this after each reboot or the Mac can't talk out FTDI cable to glove.
+    - Now you can re-run './set_ftdi 0 10' which should print the FTDI serial number, for example FTWY0EDF, or similar.
+    - If you have two gloves, you will see two serial numbers.
+    - Those serial numbers we are now going to put into 3dtarget.h file so the app knows which cable is left hand and which is right hand.
+    - If you are unsure which serial number is which, just plug on glove at a time.
+    - In Xcode project, 'src/3dtarget.h', copy the serial numbers to the #defs FTDI_RH_SN and FTDI_LH_SN.
+
+
+------------------------
+| Ready to run!        |
+------------------------
+
+Xcode has an issue running this app in debug, so up at top next to run button, make sure you have 'emptyExample Release' selected. And make sure that target is set to run as 32bit and not 64bit. This is a TODO...
+
+TBD: If somehow you get messages about ARCH not being right, go to $HOME/Library/Developer/Xcode/DerivedData and remove all those directories. Make sure each project is set to 32bit. Open each sub-project in it's own Xcode window and make sure it compiles. Eventually it will resolve.
+
+Now press the Xcode run button to launch the app.
+
+
+
+
+PROBLEMS:
+--------------
+1. AppleFTDI !
+
+    unplug device
+    cd /System/Library/Extensions/IOUSBFamily.kext/Contents/Plugins
+    rm -rf AppleUSBFTDI.kext
+    cd /System/Library/Extensions
+    sudo rm -rf FTDIUSBSerialDriver.kext/
+    reboot
+
+
+-OR-
+
+From http://www.ftdichip.com/Support/Documents/AppNotes/AN_134_FTDI_Drivers_Installation_Guide_for_MAC_OSX.pdf
+
+7.1 Using VCP or D2XX with OSX 10.9
+The VCP driver is provided as part of the kernel in OSX 10.9, therefore no driver installation is required to
+create a virtual COM port in Mavericks. If D2XX operation is desired, then the built-in VCP driver must be 
+disabled before the D2XX driver can be used. To do this, the relevant kext file needs to be renamed by 
+following the procedure below:
+Start a terminal session (Go > Applications > Utilities > Terminal) and copy/paste the following text to 
+the command prompt:
+cd /System/Library/Extensions/IOUSBFamily.kext/Contents/Plugins
+sudo mv AppleUSBFTDI.kext AppleUSBFTDI.disabled
+sudo touch /System/Library/Extensions
+As an alternative, the kextunload command can be used instead of copying the kext directory:
+sudo kextunload –b com.apple.driver.AppleUSBFTDI
+The kextunload and kextunload commands can be run in any directory.
+Reboot the system once the above commands have been executed.
+
+And another source:
+http://jands.com/downloads/vistav2/Tbjlt165.pdf
+

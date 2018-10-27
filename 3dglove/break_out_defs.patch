@@ -1,0 +1,479 @@
+Index: 3dglove.xcodeproj/project.pbxproj
+===================================================================
+--- 3dglove.xcodeproj/project.pbxproj	(revision 196)
++++ 3dglove.xcodeproj/project.pbxproj	(working copy)
+@@ -220,6 +220,7 @@
+ 		41568A7D1AF602CA00CCA670 /* libLeap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libLeap.dylib; path = 3dglove_core/libs/libLeap.dylib; sourceTree = "<group>"; };
+ 		415B8D7119763E7100094A40 /* soundCtrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = soundCtrl.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+ 		415B8D7219763E7100094A40 /* soundCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = soundCtrl.h; sourceTree = "<group>"; };
++		4173D8A21AFB654100728345 /* defs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = defs.h; path = 3dglove_core/defs.h; sourceTree = "<group>"; };
+ 		417574E619800EF100EDB03B /* prof.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = prof.cpp; path = profile/prof.cpp; sourceTree = "<group>"; };
+ 		417574E719800EF100EDB03B /* prof.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prof.h; path = profile/prof.h; sourceTree = "<group>"; };
+ 		417574EE1980D07F00EDB03B /* draw_helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = draw_helpers.cpp; path = draw_helpers/draw_helpers.cpp; sourceTree = "<group>"; };
+@@ -446,14 +447,14 @@
+ 		415B8D4D19763C7400094A40 /* 3dglove_core */ = {
+ 			isa = PBXGroup;
+ 			children = (
+-				41568A7C1AF602CA00CCA670 /* libftd2xx.1.2.2.dylib */,
+-				41568A7D1AF602CA00CCA670 /* libLeap.dylib */,
++				4173D8A21AFB654100728345 /* defs.h */,
+ 				4137DBBF1AD4D1530084FD75 /* api */,
+ 				413027ED1ADA2D9C004404D0 /* networker */,
+ 				417574DD197F6BA100EDB03B /* thread */,
+ 				415B8D6419763E7100094A40 /* bullet */,
+ 				415B8D6719763E7100094A40 /* ftdi */,
+ 				415B8D6D19763E7100094A40 /* leap */,
++				4173D8A31AFB654900728345 /* libs */,
+ 			);
+ 			name = 3dglove_core;
+ 			sourceTree = "<group>";
+@@ -518,6 +519,15 @@
+ 			name = ftdi;
+ 			sourceTree = "<group>";
+ 		};
++		4173D8A31AFB654900728345 /* libs */ = {
++			isa = PBXGroup;
++			children = (
++				41568A7C1AF602CA00CCA670 /* libftd2xx.1.2.2.dylib */,
++				41568A7D1AF602CA00CCA670 /* libLeap.dylib */,
++			);
++			name = libs;
++			sourceTree = "<group>";
++		};
+ 		417574DD197F6BA100EDB03B /* thread */ = {
+ 			isa = PBXGroup;
+ 			children = (
+Index: 3dglove_core/api/kinatouch.h
+===================================================================
+--- 3dglove_core/api/kinatouch.h	(revision 196)
++++ 3dglove_core/api/kinatouch.h	(working copy)
+@@ -15,7 +15,10 @@
+ #include "Leap.h"   // todo
+ #include <vector>
+ 
++#define HAND_SPHERE_RADIUS      7.0f
++#define MAX_IMPULSE_DATA        500.0f
+ 
++
+ //------------------------------------------------
+ // basic types
+ //------------------------------------------------
+Index: 3dglove_core/bullet/bulletDriver.h
+===================================================================
+--- 3dglove_core/bullet/bulletDriver.h	(revision 196)
++++ 3dglove_core/bullet/bulletDriver.h	(working copy)
+@@ -10,7 +10,7 @@
+ #ifndef BULLET_H
+ #define BULLET_H
+ 
+-#include "3dtarget.h"
++#include "defs.h"
+ 
+ //
+ // prototypes
+Index: 3dglove_core/defs.h
+===================================================================
+--- 3dglove_core/defs.h	(revision 0)
++++ 3dglove_core/defs.h	(working copy)
+@@ -0,0 +1,106 @@
++
++/*
++ * $Copyright$
++ * Copyright (c) 2015 All Rights Reserved, Sean Harre
++ *
++ * Sean Harre is the copyright holder of all code below.
++ * Do not re-use without permission.
++ */
++
++#ifndef _DEFS_H_
++#define _DEFS_H_
++
++#ifdef PI
++#undef PI
++#endif
++#ifdef DEG_TO_RAD
++#undef DEG_TO_RAD
++#endif
++#ifdef RAD_TO_DEG
++#undef RAD_TO_DEG
++#endif
++
++#include "kinatouch.h"
++#include "Leap.h"
++#include <btBulletDynamicsCommon.h>
++#include "hand_vectors.h"
++#include "unistd.h"
++#include <vector>
++#include <string>
++#include "prof.h"
++
++#include <BulletSoftBody/btSoftBody.h>
++#include <BulletSoftBody/btSoftRigidDynamicsWorld.h>
++#include <BulletSoftBody/btDefaultSoftBodySolver.h>
++#include <BulletSoftBody/btSoftBodyHelpers.h>
++#include "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h"
++
++#if 0
++# define dbprintf        printf
++#else
++# if DEBUG
++#  define dbprintf        printf
++# else
++#  define dbprintf(a,...)
++# endif
++#endif
++
++// Hardware device cfg
++//----------------------
++#define CFG_HAS_RIGHT_HAND      0   // has FTDI USB plug for right hand
++#define CFG_HAS_LEFT_HAND       0   // has FTDI USB plug for left hand
++#define CFG_HAS_LEAP_CTRL       1   // has Leap Motion controller
++
++// soft hand
++#define CFG_DRAW_SOFTBODY       0
++#define CFG_DRAW_HAND_SOFT      0
++
++// get hand data for joints or bones
++#define CFG_JOINT_BONE_CENTER   0
++
++// networking cfg
++#define CFG_NETWORKING          0
++
++// misc
++//#define DISABLE_PROFILING       0   // TODO: doesn't work
++
++
++//----------------------
++
++// hand
++#define JOINT_UNDEF         ofVec3f(-500,-500,-500)
++#define LEAP_JOINT_UNDEF    Leap::Vector(JOINT_UNDEF.x,JOINT_UNDEF.y,JOINT_UNDEF.z)
++
++// bullet hand soft body joints
++#define BULLET_HAND_SOFT_INIT_POS    btVector3(100,150,-150)
++#define BULLET_HAND_SOFT_INIT_SIZE   HAND_SPHERE_RADIUS*15
++#define BULLET_HAND_SOFT_INIT_SIDES  12
++#define BULLET_HAND_SOFT_INIT_WEIGHT 1.0f
++
++// ftdi
++#define BYTES_TO_TLC5947    64  // 64bytes/USB pkt <-> FTDI
++#define FTDI_MAX_DEVICES    2
++#define FTDI_RH_SN          "FTWY0DZK" // "FTWY0A04"  // TODO: "FTWY0DZK"
++#define FTDI_LH_SN          "FTXRO1EL" // "FTWY0A04"
++
++// tlc5947
++#define GS_MAX              ((1<<12)-1) // 4095 // 2^12
++#define GS_CHANNELS         24
++#define GS_BYTES            ((GS_CHANNELS*12)/8)  // bytes, ie 288bits/8 -> TLC5947
++
++// leap
++#define LEAP_TIME_NO_HAND_DISAPPEAR_NOFILT  1 // (OF_MAX_FRAME_RATE/30) // actually a count
++#define LEAP_TIME_NO_HAND_DISAPPEAR_FILT    (OF_MAX_FRAME_RATE/5) // actually a count
++#define LEAP_FILTER_COEFF   0.9999f
++
++// bullet
++#define STEP_WORLD_UPDATE_HZ    200.f   // 200=every 5ms TODO: feels this number should be dynamic
++#define STEP_WORLD_MAX_UPDATE_TIMES 10
++
++// bullet soft body
++#define BULLET_SOFT_INIT_POS    btVector3(20,350,20)
++#define BULLET_SOFT_INIT_SIZE   60
++#define BULLET_SOFT_INIT_SIDES  32
++#define BULLET_SOFT_INIT_WEIGHT 1.0f
++
++#endif  // _DEFS_H_
+Index: 3dglove_core/ftdi/ftdiDriver.h
+===================================================================
+--- 3dglove_core/ftdi/ftdiDriver.h	(revision 196)
++++ 3dglove_core/ftdi/ftdiDriver.h	(working copy)
+@@ -10,7 +10,7 @@
+ #ifndef _FTDIDRV_OBJECT
+ #define _FTDIDRV_OBJECT
+ 
+-#include "3dtarget.h"
++#include "defs.h"
+ #include "ftd2xx.h"
+ 
+ class ftdiDriver {
+Index: 3dglove_core/leap/hand_vectors.h
+===================================================================
+--- 3dglove_core/leap/hand_vectors.h	(revision 196)
++++ 3dglove_core/leap/hand_vectors.h	(working copy)
+@@ -7,7 +7,7 @@
+  * Do not re-use without permission.
+  */
+ 
+-#include "3dtarget.h"
++#include "defs.h"
+ 
+ #ifndef HAND_VECS_H
+ #define HAND_VECS_H
+Index: 3dglove_core/leap/leapDriver.h
+===================================================================
+--- 3dglove_core/leap/leapDriver.h	(revision 196)
++++ 3dglove_core/leap/leapDriver.h	(working copy)
+@@ -10,7 +10,7 @@
+ #ifndef HANDS_H
+ #define HANDS_H
+ 
+-#include "3dtarget.h"
++#include "defs.h"
+ 
+ class leapDriver;
+ leapDriver& getLeapDrv();
+Index: 3dglove_core/networker/networker.h
+===================================================================
+--- 3dglove_core/networker/networker.h	(revision 196)
++++ 3dglove_core/networker/networker.h	(working copy)
+@@ -10,7 +10,7 @@
+ #ifndef _NETWORKER_OBJECT
+ #define _NETWORKER_OBJECT
+ 
+-#include "3dtarget.h"
++#include "defs.h"
+ 
+ class netWorker : public ofThread {
+ 
+Index: 3dglove_core/thread/threadWorker.h
+===================================================================
+--- 3dglove_core/thread/threadWorker.h	(revision 196)
++++ 3dglove_core/thread/threadWorker.h	(working copy)
+@@ -10,8 +10,12 @@
+ #ifndef _THREADED_OBJECT
+ #define _THREADED_OBJECT
+ 
+-#include "3dtarget.h"
++#include "defs.h"
+ 
++//////////////////////////////////////////////////////////////////////////////////
++//#include "ofMain.h" // sbh0506 tbd - this breaks API! need pthreads baseclass here
++//////////////////////////////////////////////////////////////////////////////////
++
+ #include "leapDriver.h"     // leap
+ #include "ftdiDriver.h"     // ftdi
+ #include "bulletDriver.h"   // bullet
+Index: draw_helpers/draw_helpers.cpp
+===================================================================
+--- draw_helpers/draw_helpers.cpp	(revision 196)
++++ draw_helpers/draw_helpers.cpp	(working copy)
+@@ -174,6 +174,7 @@
+     ofPopStyle();
+ }
+ 
++#if 0
+ //--------------------------
+ void draw_helpers::draw_soft_body(vector<btSoftBody*> sBodyxx)
+ {
+@@ -248,3 +249,4 @@
+         
+     }
+ }
++#endif
+Index: draw_helpers/draw_helpers.h
+===================================================================
+--- draw_helpers/draw_helpers.h	(revision 196)
++++ draw_helpers/draw_helpers.h	(working copy)
+@@ -24,7 +24,7 @@
+     void draw_bounding_walls(vector<ktShapeInfo> walls);
+     
+     void draw_hands(const HandVector::hand_vecs left, const HandVector::hand_vecs right, ofCylinderPrimitive* rcyl);
+-    void draw_soft_body(vector<btSoftBody*> sBody);
++    //void draw_soft_body(vector<btSoftBody*> sBody);
+ 
+     bool set_debug_mode(bool newv);
+     
+Index: sound/soundCtrl.cpp
+===================================================================
+--- sound/soundCtrl.cpp	(revision 196)
++++ sound/soundCtrl.cpp	(working copy)
+@@ -26,7 +26,7 @@
+ //--------------------------
+ bool SoundCtrl::start(string filename)
+ {
+-    dbprintf("Init sound:%s...\n",filename.c_str());
++    mydbgprintf("Init sound:%s...\n",filename.c_str());
+     hit.loadSound(filename);
+     hit.setVolume(0.75f);
+     hit.setMultiPlay(true);
+@@ -55,7 +55,7 @@
+                     hit.setPan(-1.0f);  // TODO: need each time?
+                     hit.setVolume(vol);
+                     hit.play();
+-                    dbprintf("SND[%d:%d] Left imp=%f vol=%f\n",f,j,cf,vol);
++                    mydbgprintf("SND[%d:%d] Left imp=%f vol=%f\n",f,j,cf,vol);
+                 }
+             }
+         }
+@@ -74,7 +74,7 @@
+                     hit.setPan(1.0f);   // TODO: need each time?
+                     hit.setVolume(vol);
+                     hit.play();
+-                    dbprintf("SND[%d:%d] Right imp=%f vol=%f\n",f,j,cf,vol);
++                    mydbgprintf("SND[%d:%d] Right imp=%f vol=%f\n",f,j,cf,vol);
+                 }
+             }
+         }
+Index: src/3dtarget.h
+===================================================================
+--- src/3dtarget.h	(revision 196)
++++ src/3dtarget.h	(working copy)
+@@ -12,87 +12,41 @@
+ 
+ #define APP_VERSION "0.6.2"
+ 
+-#ifdef PI
+-#undef PI
+-#endif
+-#ifdef DEG_TO_RAD
+-#undef DEG_TO_RAD
+-#endif
+-#ifdef RAD_TO_DEG
+-#undef RAD_TO_DEG
+-#endif
+-
+ #include "kinatouch.h"
+-#include "Leap.h"
+-#include "ofMain.h"
+-#include <btBulletDynamicsCommon.h>
+-#include "hand_vectors.h"
+ #include "unistd.h"
+ #include <vector>
+ #include <string>
+ #include "prof.h"
++#include "ofMain.h"
+ 
+-#include <BulletSoftBody/btSoftBody.h>
+-#include <BulletSoftBody/btSoftRigidDynamicsWorld.h>
+-#include <BulletSoftBody/btDefaultSoftBodySolver.h>
+-#include <BulletSoftBody/btSoftBodyHelpers.h>
+-#include "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h"
+-
+ #if 0
+-# define dbprintf        printf
++# define mydbgprintf        printf
+ #else
+ # if DEBUG
+-#  define dbprintf        printf
++#  define mydbgprintf        printf
+ # else
+-#  define dbprintf(a,...)
++#  define mydbgprintf(a,...)
+ # endif
+ #endif
+ 
+-// Hardware device cfg
+-//----------------------
+-#define CFG_HAS_RIGHT_HAND      0   // has FTDI USB plug for right hand
+-#define CFG_HAS_LEFT_HAND       0   // has FTDI USB plug for left hand
+-#define CFG_HAS_LEAP_CTRL       1   // has Leap Motion controller
+-
+ // Initial physics shapes cfg
+ #define CFG_DRAW_BOUNDING_WALLS 1
+-#define CFG_DRAW_SPHERE         0
+-#define CFG_DRAW_CUBE           0
+-#define CFG_DRAW_SOFTBODY       0
+-#define CFG_DRAW_HAND_SOFT      0
+-#define CFG_DRAW_CYLINDER       0
+ 
+ // draw hand joints as cylinders/bones
+ #define CFG_DRAW_HAND_BONES     0
+-#define CFG_JOINT_BONE_CENTER   0
+ 
+ // ofApp draw collisions reported from API?
+ #define CFG_DRAW_COLLISIONS     0
+ 
+-// networking cfg
+-#define CFG_NETWORKING          0
+-
+ // misc
+ #define DISABLE_PROFILING       0   // TODO: doesn't work
+ 
+ 
+ //----------------------
+ 
+-// glove
+-#define JOINTS_PER_HAND     24  // 5/finger, 4/thumb
+-
+ // hand
+-#define HAND_SPHERE_RADIUS  7.0f
+ #define HAND_BONE_WIDTH     100.0f      // ??
+-#define JOINT_UNDEF         ofVec3f(-500,-500,-500)
+-#define LEAP_JOINT_UNDEF    Leap::Vector(JOINT_UNDEF.x,JOINT_UNDEF.y,JOINT_UNDEF.z)
+ 
+-// bullet hand soft body joints
+-#define BULLET_HAND_SOFT_INIT_POS    btVector3(100,150,-150)
+-#define BULLET_HAND_SOFT_INIT_SIZE   HAND_SPHERE_RADIUS*15
+-#define BULLET_HAND_SOFT_INIT_SIDES  12
+-#define BULLET_HAND_SOFT_INIT_WEIGHT 1.0f
+-
+ // bounding walls
+ #if 0
+ // tight bounding walls, maybe too tight
+@@ -111,54 +65,15 @@
+ #endif
+ 
+ // camera
+-#define CAM_DISTANCE        2500
+ #define CAM_TARGET          ofVec3f(0,0,0) //A: If the center is always (0,0,0) its easier to change the scale
++// sbh0506 - remove?
+ #define CAM_SCALE           10.0f
+ #define TRACK_HAND_COEFF_VALID      ofVec3f(0.98, 0.98, 0.98)
+ #define TRACK_HAND_COEFF_NOTVALID   ofVec3f(0.995, 0.995, 0.995)
+ 
+-// ftdi
+-#define BYTES_TO_TLC5947    64  // 64bytes/USB pkt <-> FTDI
+-#define FTDI_MAX_DEVICES    2
+-#define FTDI_RH_SN          "FTWY0DZK" // "FTWY0A04"  // TODO: "FTWY0DZK"
+-#define FTDI_LH_SN          "FTXRO1EL" // "FTWY0A04"
+-
+-// tlc5947
+-#define GS_MAX              ((1<<12)-1) // 4095 // 2^12
+-#define GS_CHANNELS         24
+-#define GS_BYTES            ((GS_CHANNELS*12)/8)  // bytes, ie 288bits/8 -> TLC5947
+-
+ // oF
+ #define OF_MAX_FRAME_RATE   60
+ 
+-// leap
+-#define LEAP_TIME_NO_HAND_DISAPPEAR_NOFILT  1 // (OF_MAX_FRAME_RATE/30) // actually a count
+-#define LEAP_TIME_NO_HAND_DISAPPEAR_FILT    (OF_MAX_FRAME_RATE/5) // actually a count
+-#define LEAP_FILTER_COEFF   0.9999f
+-
+-// bullet
+-#define STEP_WORLD_UPDATE_HZ    200.f   // 200=every 5ms TODO: feels this number should be dynamic
+-#define STEP_WORLD_MAX_UPDATE_TIMES 10
+-
+-// bullet sphere
+-#define BULLET_SPHERE_RADIUS    btScalar(60.0f)
+-#define SPHERE_INITIAL          btVector3(0,350,-75)
+-#define MAX_IMPULSE_DATA        500.0f
+-
+-// bullet soft body
+-#define BULLET_SOFT_INIT_POS    btVector3(20,350,20)
+-#define BULLET_SOFT_INIT_SIZE   60
+-#define BULLET_SOFT_INIT_SIDES  32
+-#define BULLET_SOFT_INIT_WEIGHT 1.0f
+-
+-// bullet cube
+-#define START_POS               btVector3(0,0,-120)
+-#define START_WITH_THIS_MANY_CUBES      1   // in each x,y,z axis
+-#define ARRAY_SIZE_X    START_WITH_THIS_MANY_CUBES
+-#define ARRAY_SIZE_Y    START_WITH_THIS_MANY_CUBES
+-#define ARRAY_SIZE_Z    START_WITH_THIS_MANY_CUBES
+-#define BULLET_CUBE_INIT_SIZE   btVector3(50,50,50)
+-
+ // statistics gui
+ #define DEFAULT_STAT_UPDATE_TIMES_PER_SEC   5
+ #define MOVGRAPH_DEPTH       512    // buffer depth to display in movWindow
+Index: src/ofApp.h
+===================================================================
+--- src/ofApp.h	(revision 196)
++++ src/ofApp.h	(working copy)
+@@ -11,7 +11,6 @@
+ #define _OF_APP_H_
+ 
+ #include "3dtarget.h"       // target
+-#include "threadWorker.h"   // thread
+ #include "draw_helpers.h"
+ #include "ofxUI.h"
+ 

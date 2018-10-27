@@ -1,0 +1,2 @@
+1. 2.1mm 12v barrel jack need unconnected pin connected to ground
+2. LDO LM2936DT-3.3 was ordered but needed 5v part, ordered 5v part now

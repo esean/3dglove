@@ -1,0 +1,4 @@
+v0.6: some cosmetic improvements
+    (v050115_v0.6 f2755e8)
+v0.5: API is now fully connected and being used by OF (or at least somewhat...)
+    (v041715_v0.5 91ed7dd) 

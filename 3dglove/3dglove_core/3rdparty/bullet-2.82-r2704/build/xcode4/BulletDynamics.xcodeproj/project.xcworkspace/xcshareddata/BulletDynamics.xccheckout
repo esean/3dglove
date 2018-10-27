@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>CFBAC009-4EE7-4CB7-9814-DF4267DA3DF6</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BulletDynamics</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1b8dba3e-e082-93cf-15dd-ce57b7db7bff++505</key>
+		<string>https://github.com/KinaTouch/3dglove/trunk</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>3dglove_core/3rdparty/bullet-2.82-r2704/build/xcode4/BulletDynamics.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1b8dba3e-e082-93cf-15dd-ce57b7db7bff++505</key>
+		<string>../../../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>1b8dba3e-e082-93cf-15dd-ce57b7db7bff++505</key>
+		<string>https://github.com/KinaTouch/3dglove</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/KinaTouch/3dglove/trunk/3dglove_core/3rdparty/bullet-2.82-r2704/build/xcode4/BulletDynamics.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1b8dba3e-e082-93cf-15dd-ce57b7db7bff++505</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1b8dba3e-e082-93cf-15dd-ce57b7db7bff++505</string>
+			<key>IDESourceControlWCCName</key>
+			<string>3dglove</string>
+		</dict>
+	</array>
+</dict>
+</plist>
