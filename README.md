@@ -8,3 +8,8 @@ Software on Mac used the Leap Motion controller to determine user hand location 
 Glove hardware provided 24 points of haptic info per hand (ie, 24 vibrators), driven by a 24-channel 12-bit LED driver TLC5947. Driver updated via FTDI SPI MPSSE cable, shipping 288bits to LED driver at ~100Hz update rate.
 
 https://www.santacruzsentinel.com/2015/04/30/santa-cruz-hopefuls-vie-for-20000-in-startup-challenge/
+
+Another team member posted a video showing the Mac UI and Leap motion controller, but the glove is not being used in this demo,
+
+https://www.youtube.com/watch?v=leHrdxnxjvA
+
